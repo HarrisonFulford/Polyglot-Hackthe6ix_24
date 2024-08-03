@@ -13,7 +13,7 @@ from keras import Sequential
 print("TensorFlow version:", tf.__version__)
 
 
-batch_size = 32
+batch_size = 256
 
 # Fixed dimension for all images used
 img_height = 128
@@ -71,7 +71,7 @@ model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-epochs=1
+epochs=10
 history = model.fit(
   train_ds,
   validation_data=val_ds,
@@ -99,3 +99,5 @@ plt.plot(epochs_range, val_loss, label='Validation Loss')
 plt.legend(loc='upper right')
 plt.title('Training and Validation Loss')
 plt.show()
+
+model.save('finger_training_model.keras')
