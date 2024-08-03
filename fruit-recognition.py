@@ -10,29 +10,33 @@ from keras import Sequential
 
 print("TensorFlow version:", tf.__version__)
 
-batch_size = 32
-img_height = 180
-img_width = 180
+batch_size = 64 #Default: 64
+img_height = 180 #Default: 180
+img_width = 180 #Default: 180
+epochs = 7 #Default:5
 train_ds = tf.keras.utils.image_dataset_from_directory(
   'testData',
-  validation_split=0.2,
+  validation_split=0.2, #Default: 0.2 
   subset="training",
   seed=123,
+  class_names=["apple", "banana", "mango", "orange"],
   image_size=(img_height, img_width),
   batch_size=batch_size)
 val_ds = tf.keras.utils.image_dataset_from_directory(
   'testData',
-  validation_split=0.2,
+  validation_split=0.8, #Default: 0.2
   subset="validation",
   seed=123,
+  class_names=["apple", "banana", "mango", "orange"],
   image_size=(img_height, img_width),
   batch_size=batch_size)
-AUTOTUNE = tf.data.AUTOTUNE
-train_ds = train_ds.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
-val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
 class_names = train_ds.class_names
 
 AUTOTUNE = tf.data.AUTOTUNE
+train_ds = train_ds.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
+val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
+
+print(class_names)
 
 normalization_layer = tf.keras.layers.Rescaling(1./255)
 
@@ -60,7 +64,6 @@ model.compile(optimizer='adam',
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy'])
 
-epochs=10
 history = model.fit(
   train_ds,
   validation_data=val_ds,
@@ -88,3 +91,5 @@ plt.plot(epochs_range, val_loss, label='Validation Loss')
 plt.legend(loc='upper right')
 plt.title('Training and Validation Loss')
 plt.show()
+
+model.save("fruitModel.keras")
