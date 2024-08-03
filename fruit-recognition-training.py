@@ -12,12 +12,12 @@ from keras import Sequential
 
 print("TensorFlow version:", tf.__version__)
 
-batch_size = 64 #Default: 64
-img_height = 180 #Default: 180
-img_width = 180 #Default: 180
-epochs = 2 #Default:5
+batch_size = 32 #Default: 64
+img_height = 128 #Default: 180
+img_width = 128 #Default: 180
+epochs = 20 #Default:5
 train_ds = tf.keras.utils.image_dataset_from_directory(
-  'testData',
+  'fruits',
   validation_split=0.2, #Default: 0.2 
   subset="training",
   seed=123,
@@ -25,7 +25,7 @@ train_ds = tf.keras.utils.image_dataset_from_directory(
   image_size=(img_height, img_width),
   batch_size=batch_size)
 val_ds = tf.keras.utils.image_dataset_from_directory(
-  'testData',
+  'fruits',
   validation_split=0.8, #Default: 0.2
   subset="validation",
   seed=123,
