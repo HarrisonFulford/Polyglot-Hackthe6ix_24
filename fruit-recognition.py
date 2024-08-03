@@ -92,4 +92,4 @@ plt.legend(loc='upper right')
 plt.title('Training and Validation Loss')
 plt.show()
 
-model.save("fruitModel.keras")
+model.save("fruitModel.h5")
