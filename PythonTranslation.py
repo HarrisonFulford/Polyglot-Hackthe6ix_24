@@ -1,3 +1,4 @@
+from googletrans import Translator
 languages = ["fr", #French
         "es", #Spanish
         "pt", #Portuguese
