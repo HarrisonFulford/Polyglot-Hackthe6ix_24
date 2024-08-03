@@ -27,11 +27,23 @@ while(1):
 	red_upper = numpy.array([180, 255, 255], numpy.uint8) 
 	red_mask = cv2.inRange(hsvFrame, red_lower, red_upper) 
 
+	# Set range for orange color and 
+	# define mask 
+	org_lower = numpy.array([50, 33, 0], numpy.uint8) 
+	org_upper = numpy.array([255, 229, 180], numpy.uint8) 
+	org_mask = cv2.inRange(hsvFrame, org_lower, org_upper) 
+
+	# Set range for yellow color and 
+	# define mask 
+	ylw_lower = numpy.array([51,51,0], numpy.uint8) 
+	ylw_upper = numpy.array([255,255,204], numpy.uint8) 
+	ylw_mask = cv2.inRange(hsvFrame, ylw_lower, ylw_upper) 
+
 	# Set range for green color and 
 	# define mask 
-	green_lower = numpy.array([25, 52, 72], numpy.uint8) 
-	green_upper = numpy.array([102, 255, 255], numpy.uint8) 
-	green_mask = cv2.inRange(hsvFrame, green_lower, green_upper) 
+	grn_lower = numpy.array([25, 52, 72], numpy.uint8) 
+	grn_upper = numpy.array([102, 255, 255], numpy.uint8) 
+	grn_mask = cv2.inRange(hsvFrame, grn_lower, grn_upper) 
 
 	# Set range for blue color and 
 	# define mask 
@@ -50,10 +62,20 @@ while(1):
 	res_red = cv2.bitwise_and(imageFrame, imageFrame, 
 							mask = red_mask) 
 	
+	# For orange color 
+	org_mask = cv2.dilate(org_mask, kernel) 
+	res_org = cv2.bitwise_and(imageFrame, imageFrame, 
+							mask = org_mask) 
+	
+	# For yellow color 
+	ylw_mask = cv2.dilate(ylw_mask, kernel) 
+	res_ylw = cv2.bitwise_and(imageFrame, imageFrame, 
+							mask = red_mask) 
+	
 	# For green color 
-	green_mask = cv2.dilate(green_mask, kernel) 
-	res_green = cv2.bitwise_and(imageFrame, imageFrame, 
-								mask = green_mask) 
+	grn_mask = cv2.dilate(grn_mask, kernel) 
+	res_grn = cv2.bitwise_and(imageFrame, imageFrame, 
+								mask = grn_mask) 
 	
 	# For blue color 
 	blue_mask = cv2.dilate(blue_mask, kernel) 
@@ -76,9 +98,43 @@ while(1):
 			cv2.putText(imageFrame, "Red Colour", (x, y), 
 						cv2.FONT_HERSHEY_SIMPLEX, 1.0, 
 						(0, 0, 255))	 
+			
+	# Creating contour to track orange color 
+	contours, hierarchy = cv2.findContours(org_mask, 
+										cv2.RETR_TREE, 
+										cv2.CHAIN_APPROX_SIMPLE) 
+	
+	for pic, contour in enumerate(contours): 
+		area = cv2.contourArea(contour) 
+		if(area > 300): 
+			x, y, w, h = cv2.boundingRect(contour) 
+			imageFrame = cv2.rectangle(imageFrame, (x, y), 
+									(x + w, y + h), 
+									(255,165,0), 2) 
+			
+			cv2.putText(imageFrame, "Orange Colour", (x, y), 
+						cv2.FONT_HERSHEY_SIMPLEX, 1.0, 
+						(255,165,0))	 
+			
+	# Creating contour to track yellow  color 
+	contours, hierarchy = cv2.findContours(ylw_mask, 
+										cv2.RETR_TREE, 
+										cv2.CHAIN_APPROX_SIMPLE) 
+	
+	for pic, contour in enumerate(contours): 
+		area = cv2.contourArea(contour) 
+		if(area > 300): 
+			x, y, w, h = cv2.boundingRect(contour) 
+			imageFrame = cv2.rectangle(imageFrame, (x, y), 
+									(x + w, y + h), 
+									(255,255,0), 2) 
+			
+			cv2.putText(imageFrame, "Yellow Colour", (x, y), 
+						cv2.FONT_HERSHEY_SIMPLEX, 1.0, 
+						(255,255,0))	 
 
 	# Creating contour to track green color 
-	contours, hierarchy = cv2.findContours(green_mask, 
+	contours, hierarchy = cv2.findContours(grn_mask, 
 										cv2.RETR_TREE, 
 										cv2.CHAIN_APPROX_SIMPLE) 
 	
