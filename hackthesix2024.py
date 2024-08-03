@@ -52,12 +52,12 @@ tf.keras.layers.Flatten()
 tf.keras.layers.Dense(64, activation='relu')
 tf.keras.layers.Dense(10, activation='softmax')
 
-
 loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 
 model.compile(optimizer='adam', loss=loss_fn, metrics=['accuracy'])
 
 model.fit(training_images, training_labels, epochs=10)
+
 # Checking the model's performance
 model.evaluate(testing_images, testing_labels)
 loss, accuracy = model.evaluate(testing_images, testing_labels, verbose=2)
