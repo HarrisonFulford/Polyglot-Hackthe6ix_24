@@ -38,23 +38,25 @@ test = ds.skip(train_size + val_size).take(test_size)
 model = keras.models.Sequential([
     #Conv2D extracts detects the many different features of an image (Ex: edges, patterns, textures)
     # 16 filters, 3x3 pixel filter. Relu converts all negative outputs to 0 and preserves the postive outputs.
-    keras.layers.Conv2D(16, (3, 3), 1, activation='relu', input_shape=(128, 128, 3)), # Input layer
+    keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(128, 128, 3)), # Input layer
     # MaxPooling2D extracts the most prominent parts and dampens the less important parts, reducing computational load and the 
     # image in question to be more obvious. 
     keras.layers.MaxPooling2D(),
-    keras.layers.Conv2D(32, (3, 3), 1, activation='relu'),
+    keras.layers.Conv2D(64, (3, 3), activation='relu'),
     keras.layers.MaxPooling2D(),
-    keras.layers.Conv2D(16, (3, 3), 1, activation='relu'),
+    keras.layers.Conv2D(64, (3, 3), activation='relu'),
+    keras.layers.MaxPooling2D(),
     
     # Flattening - reshaping a multi-dimensional array into a one-dimensional array
     keras.layers.Flatten(),
-    keras.layers.Dense(256, activation='relu'),
-    keras.layers.Dense(1, activation='sigmoid')
+
+    keras.layers.Dense(128, activation='relu'),
+    keras.layers.Dense(10, activation='softmax')
 ])
 
-model.compile(optimizer='adam', loss='SparseCategoricalCrossentropy', metrics=['accuracy'])
+model.compile('adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 model.summary()
 
-hist = model.fit(train, epochs=20, validation_data=val)
+model.fit(train, epochs=10)
 
 
