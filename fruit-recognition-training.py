@@ -122,9 +122,7 @@ framesPerPhoto = 5 #How often a photo will be taken (Per frame)
 photoType = ".png"
 
 def checkImg():
-  cam_url = "screenshots/currentFrame" + photoType
-  cam_path = tf.keras.utils.get_file('CamImage', origin=cam_url)
-
+  cam_path = "screenshots/currentFrame.png"
   img = tf.keras.utils.load_img(
       cam_path, target_size=(img_height, img_width)
   )
