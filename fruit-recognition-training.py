@@ -1,6 +1,7 @@
 import pickle
 import PIL
 import cv2 as cv
+import keras
 import numpy as np
 from matplotlib import pyplot as plt
 import tensorflow as tf
@@ -65,6 +66,28 @@ model.compile(optimizer='adam',
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy'])
 
+data_augmentation = keras.Sequential(
+  [
+    layers.RandomFlip("horizontal",
+                      input_shape=(img_height,
+                                  img_width,
+                                  3)),
+    layers.RandomRotation(0.1),
+    layers.RandomZoom(0.1),
+  ]
+)
+
+plt.figure(figsize=(10, 10))
+for images, _ in train_ds.take(1):
+  for i in range(9):
+    augmented_images = data_augmentation(images)
+    ax = plt.subplot(3, 3, i + 1)
+    plt.imshow(augmented_images[0].numpy().astype("uint8"))
+    plt.axis("off")
+
+model.summary()
+
+#Scans each img
 history = model.fit(
   train_ds,
   validation_data=val_ds,
@@ -92,8 +115,53 @@ plt.plot(epochs_range, val_loss, label='Validation Loss')
 plt.legend(loc='upper right')
 plt.title('Training and Validation Loss')
 plt.show()
+
+vid = cv.VideoCapture(0) 
+frameno = 0
+framesPerPhoto = 5 #How often a photo will be taken (Per frame)
+photoType = ".png"
+
+def checkImg():
+  cam_path = "screenshots/currentFrame.png"
+  img = tf.keras.utils.load_img(
+      cam_path, target_size=(img_height, img_width)
+  )
+  img_array = tf.keras.utils.img_to_array(img)
+  img_array = tf.expand_dims(img_array, 0) # Create a batch
+
+  predictions = model.predict(img_array)
+  score = tf.nn.softmax(predictions[0])
+
+  print(
+      "This image most likely belongs to {} with a {:.2f} percent confidence."
+      .format(class_names[np.argmax(score)], 100 * np.max(score))
+  )
+  return "a"
+
+while(True):
+  # Display the resulting frame 
+  if (frameno%framesPerPhoto == 0): 
+    ret, frame = vid.read() 
+    cv.imshow('frame', frame) 
+    name = "screenshots/currentFrame" + photoType
+    print ('New frame captured')
+    cv.imwrite(name, frame)
+    frameno = 0
+    fruit = checkImg();
+  frameno += 1
+  # the 'q' button is set as the 
+  # quitting button you may use any 
+  # desired button of your choice 
+  if cv.waitKey(1) & 0xFF == ord('q'): 
+    break
+  
+# After the loop release the cap object 
+vid.release() 
+# Destroy all the windows 
+cv.destroyAllWindows() 
+
 print("Saving")
-with open('fruitTest.npy', 'wb') as file_pi:
-    pickle.dump(history.history, file_pi)
+#with open('fruitTest.npy', 'wb') as file_pi:
+#    pickle.dump(history.history, file_pi)
 #model.save("fruitModel.h5")
 print("Saved")
