@@ -20,7 +20,7 @@ print("TensorFlow version:", tf.__version__)
 batch_size = 64 # Default: 64
 img_height = 128 # Default: 180
 img_width = 128 # Default: 180
-epochs = 20 # Default:5
+epochs = 10 # Default:5
 
 # Data set used to train the model
 train_ds = tf.keras.utils.image_dataset_from_directory(
@@ -166,6 +166,6 @@ print("Saving")
 
 #with open('fruitTest.npy', 'wb') as file_pi:
 #    pickle.dump(history.history, file_pi)
-model.save("fruitModel.keras")
+model.save("fruitModel2.keras")
 print("Saved")
 

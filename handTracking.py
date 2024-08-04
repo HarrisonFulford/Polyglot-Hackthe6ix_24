@@ -1,9 +1,10 @@
+import time
 import cv2
 import numpy as np
 import mediapipe as mp
 from fruitRecognitionRead import checkImg
 
-vid = cv2.VideoCapture("screenshots/currentFrame.jpg")
+vid = cv2.VideoCapture(0)
 vid.set(3, 1280)
 mp_hands = mp.solutions.hands
 hand = mp_hands.Hands(max_num_hands= 1, min_detection_confidence= 0.7, min_tracking_confidence= 0.6 )
@@ -14,7 +15,7 @@ screenWidth = int(285*6.8)
 screenHeight = int(550*2)
 
 frameno = 0
-framesPerPhoto = 30 #How often a photo will be taken (Per frame)
+framesPerPhoto = 60 #How often a photo will be taken (Per frame)
 photoType = '.jpg' #Photo type (png, jpg, etc)
 
 def transferAxisCordInfo():
@@ -37,31 +38,35 @@ def cropImg():
     return "A"
 
 while (True):
-    _, frame = vid.read()
-    # convert from bgr to rgb
-    RGBframe = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    result = hand.process(RGBframe)
-    if result.multi_hand_landmarks:
-        #print("hand found")
-        for handLandmarks in result.multi_hand_landmarks :
-            name = "screenshots/currentFrame" + photoType
-            cv2.imwrite(name, frame)
-            indexTip = handLandmarks.landmark[8]
-            bottomAxis = int((indexTip.y*screenHeight))
-            topAxis = int(bottomAxis-height)
-            leftAxis = int((indexTip.x*screenWidth-(width/2)))
-            rightAxis = int((indexTip.x*screenWidth+(width/2)))
-            print("X:" + str(indexTip.x))
-            print("Y:" + str(indexTip.y))
-            cv2.rectangle(frame, (rightAxis, bottomAxis), (leftAxis, topAxis), (0, 255, 0), 2)
-            mp_draw.draw_landmarks(frame, handLandmarks, mp_hands.HAND_CONNECTIONS)
-            cropImg()
-            print(checkImg())
-            
-    # Display the resulting frame 
-    cv2.imshow('video', frame) 
-    if cv2.waitKey(1) & 0xFF == ord('q'): 
-        break
+    if (frameno%framesPerPhoto == 0):
+        _, frame = vid.read()
+        # convert from bgr to rgb
+        RGBframe = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        result = hand.process(RGBframe)
+        if result.multi_hand_landmarks:
+            #print("hand found")
+            for handLandmarks in result.multi_hand_landmarks :
+                name = "screenshots/currentFrame" + photoType
+                cv2.imwrite(name, frame)
+                indexTip = handLandmarks.landmark[8]
+                bottomAxis = int((indexTip.y*screenHeight))
+                topAxis = int(bottomAxis-height)
+                leftAxis = int((indexTip.x*screenWidth-(width/2)))
+                rightAxis = int((indexTip.x*screenWidth+(width/2)))
+                print("X:" + str(indexTip.x))
+                print("Y:" + str(indexTip.y))
+                cv2.rectangle(frame, (rightAxis, bottomAxis), (leftAxis, topAxis), (0, 255, 0), 2)
+                mp_draw.draw_landmarks(frame, handLandmarks, mp_hands.HAND_CONNECTIONS)
+                cropImg()
+                print(checkImg())
+                frameno += 1
+                time.sleep(0.5)
+                
+        # Display the resulting frame 
+        cv2.imshow('video', frame) 
+        if cv2.waitKey(1) & 0xFF == ord('q'): 
+            break
+    frameno = 0
     #ssnum += 1
     #name = 'screenshots/' + str(ssnum) + photoType
     #print ('new frame captured...' + name)

@@ -4,6 +4,7 @@ import cv2 as cv
 import numpy as np
 from matplotlib import pyplot as plt
 import tensorflow as tf
+# mediapipe
 import pathlib
 import tensorflow
 import keras
@@ -16,7 +17,7 @@ img_height = 128 #Default: 180
 img_width = 128 #Default: 180
 epochs = 20 #Default:5
 print("Loading")
-new_model = tf.keras.models.load_model('fruitModel.keras')
+new_model = tf.keras.models.load_model('fruitModel3.keras')
 
 # Show the model architecture
 new_model.summary()
