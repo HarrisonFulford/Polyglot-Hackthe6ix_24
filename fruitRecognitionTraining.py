@@ -135,7 +135,7 @@ plt.title('Training and Validation Loss')
 plt.show()
 
 #Done in handTracking.py
-"""
+
 #Done in handTracking.py
 """
 while(True):
@@ -161,13 +161,11 @@ vid.release()
 # Destroy all the windows 
 cv.destroyAllWindows() 
 """
-"""
 print("Saving")
 
 
 #with open('fruitTest.npy', 'wb') as file_pi:
 #    pickle.dump(history.history, file_pi)
-model.save("fruitModel.keras")
 model.save("fruitModel.keras")
 print("Saved")
 

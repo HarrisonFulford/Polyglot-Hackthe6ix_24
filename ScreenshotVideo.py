@@ -18,7 +18,7 @@ while(True):
     cv2.imshow('frame', frame) 
     if (frameno%framesPerPhoto == 0): 
         ssnum += 1
-        name = 'fruits2/apple-v2/' + str(ssnum) + photoType
+        name = 'screenshots/' + str(ssnum) + photoType
         print ('new frame captured...' + name)
         cv2.imwrite(name, frame)
         frameno = 0

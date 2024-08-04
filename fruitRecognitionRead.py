@@ -14,7 +14,7 @@ from keras import Model
 batch_size = 64 #Default: 64
 img_height = 128 #Default: 180
 img_width = 128 #Default: 180
-epochs = 7 #Default:5
+epochs = 20 #Default:5
 print("Loading")
 new_model = tf.keras.models.load_model('fruitModel.keras')
 
@@ -22,12 +22,11 @@ new_model = tf.keras.models.load_model('fruitModel.keras')
 new_model.summary()
 
 frameno = 0
-ssnum = 0
 framesPerPhoto = 3 #How often a photo will be taken (Per frame)
 photoType = '.jpg' #Photo type (png, jpg, etc)
-class_names = ["apple", "banana", "mango", "orange"]
+class_names = ["apple", "banana", "mango", "orange", "vacant"]
 def checkImg():
-  cam_path = "screenshots/currentFrame" + photoType
+  cam_path = "screenshots/currentFrameCropped" + photoType
   img = tf.keras.utils.load_img(
       cam_path, target_size=(img_height, img_width)
   )
@@ -37,11 +36,12 @@ def checkImg():
   predictions = new_model.predict(img_array)
   score = tf.nn.softmax(predictions[0])
 
-  print(
-      "This image most likely belongs to {} with a {:.2f} percent confidence."
-      .format(class_names[np.argmax(score)], 100 * np.max(score))
+  return(
+    "This image most likely belongs to {} with a {:.2f} percent confidence."
+    .format(class_names[np.argmax(score)], 100 * np.max(score))
   )
-checkImg()
+
+
 """acc = history['accuracy']
 val_acc = history['val_accuracy']
 #acc = history.history['accuracy']

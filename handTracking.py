@@ -1,66 +1,63 @@
 import cv2
 import numpy as np
 import mediapipe as mp
-from fruitRecognitionTraining import checkImg
+from fruitRecognitionRead import checkImg
 
-screenWidth = int(1512)
-screenHeight = int(2016)
-drawingMp = mp.solutions.drawing_utils
-handMp = mp.solutions.hands
-hand = handMp.Hands(max_num_hands= 1, min_detection_confidence= 0.7, min_tracking_confidence= 0.6)
-# define a video capture object 
-# (x, y, width, height) = cv2.getWindowImageRect('Frame')
-vid = cv2.VideoCapture(0) 
+vid = cv2.VideoCapture("screenshots/currentFrame.jpg")
 vid.set(3, 1280)
+mp_hands = mp.solutions.hands
+hand = mp_hands.Hands(max_num_hands= 1, min_detection_confidence= 0.7, min_tracking_confidence= 0.6 )
+mp_draw = mp.solutions.drawing_utils
+height = 512
+width = 512
+screenWidth = int(285*6.8)
+screenHeight = int(550*2)
+
 frameno = 0
-ssnum = 0
-framesPerPhoto = 3 #How often a photo will be taken (Per frame)
+framesPerPhoto = 30 #How often a photo will be taken (Per frame)
 photoType = '.jpg' #Photo type (png, jpg, etc)
-bottomAxis = 0
-topAxis = 0
-leftAxis = 0
-rightAxis = 0
-height = 256
-width = 256
 
 def transferAxisCordInfo():
     return bottomAxis, topAxis, leftAxis, rightAxis
 
 def cropImg():
     # Import packages    
-    img = cv2.imread("screenshots/currentFrame" + str(ssnum) + photoType)
-    cv2.imshow("original", img)
+    img = cv2.imread("screenshots/currentFrame" + photoType)
+    #cv2.imshow("original", img)
     # Cropping an image
-    cropped_image = img[topAxis:leftAxis, bottomAxis:rightAxis] 
+    print(int(indexTip.x*screenWidth))
+    print(int(indexTip.y*screenHeight))
+    cropped_image = img[topAxis:bottomAxis, leftAxis:rightAxis] 
     # Save the cropped image
     if cropped_image is not None and cropped_image.size > 0:
-        cv2.imwrite("screenshots/currentFrame" + str(ssnum) + photoType, cropped_image)
+        cv2.imwrite("screenshots/currentFrameCropped" + photoType, cropped_image)
+        print("Saved crop")
     else:
         print("Error: cropped_image is empty")
+    return "A"
 
-while(True): 
-    # Capture the video frame by frame 
-    _, frame = vid.read() 
+while (True):
+    _, frame = vid.read()
+    # convert from bgr to rgb
     RGBframe = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     result = hand.process(RGBframe)
     if result.multi_hand_landmarks:
-        for handLandmarks in result.multi_hand_landmarks:
-            name = "screenshots/currentFrame" + str(ssnum) + photoType
-            print ('New frame captured')
+        #print("hand found")
+        for handLandmarks in result.multi_hand_landmarks :
+            name = "screenshots/currentFrame" + photoType
             cv2.imwrite(name, frame)
-            #print(handLandmarks)
             indexTip = handLandmarks.landmark[8]
-            print("X:" + str(indexTip.x*screenWidth))
-            print("Y:" + str(indexTip.y*screenHeight))
-            bottomAxis = int((indexTip.y*screenHeight)*0.357)
+            bottomAxis = int((indexTip.y*screenHeight))
             topAxis = int(bottomAxis-height)
-            leftAxis = int((indexTip.x*screenWidth-(width/2))*0.83)
-            rightAxis = int((indexTip.x*screenWidth+(width/2))*0.83)
+            leftAxis = int((indexTip.x*screenWidth-(width/2)))
+            rightAxis = int((indexTip.x*screenWidth+(width/2)))
+            print("X:" + str(indexTip.x))
+            print("Y:" + str(indexTip.y))
             cv2.rectangle(frame, (rightAxis, bottomAxis), (leftAxis, topAxis), (0, 255, 0), 2)
-            drawingMp.draw_landmarks(frame, handLandmarks, handMp.HAND_CONNECTIONS)
+            mp_draw.draw_landmarks(frame, handLandmarks, mp_hands.HAND_CONNECTIONS)
             cropImg()
-            checkImg()
-            ssnum += 1
+            print(checkImg())
+            
     # Display the resulting frame 
     cv2.imshow('video', frame) 
     if cv2.waitKey(1) & 0xFF == ord('q'): 
