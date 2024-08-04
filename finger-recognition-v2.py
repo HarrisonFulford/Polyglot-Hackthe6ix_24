@@ -9,9 +9,7 @@ import pathlib
 import tensorflow
 from keras import layers
 from keras import Sequential
-
 print("TensorFlow version:", tf.__version__)
-
 
 batch_size = 256
 

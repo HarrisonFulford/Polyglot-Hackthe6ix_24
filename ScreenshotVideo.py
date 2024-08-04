@@ -7,19 +7,18 @@ import matplotlib
 vid = cv2.VideoCapture(0) 
 frameno = 0
 ssnum = 0
-framesPerPhoto = 5 #How often a photo will be taken (Per frame)
-photoType = '.jpg' #Photo type (png, jpg, etc)
+framesPerPhoto = 5 # How often a photo will be taken (Per frame)
+photoType = '.jpg' # Photo type (png, jpg, etc)
 while(True): 
       
-    # Capture the video frame 
-    # by frame 
+    # Capture the video frame by frame 
     ret, frame = vid.read() 
   
     # Display the resulting frame 
     cv2.imshow('frame', frame) 
     if (frameno%framesPerPhoto == 0): 
         ssnum += 1
-        name = 'screenshots/' + str(ssnum) + photoType
+        name = 'fruits2/apple-v2/' + str(ssnum) + photoType
         print ('new frame captured...' + name)
         cv2.imwrite(name, frame)
         frameno = 0
