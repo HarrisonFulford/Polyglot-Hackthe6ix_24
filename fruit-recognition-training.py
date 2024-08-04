@@ -12,7 +12,7 @@ from keras import Sequential
 
 print("TensorFlow version:", tf.__version__)
 
-batch_size = 32 #Default: 64
+batch_size = 64 #Default: 64
 img_height = 128 #Default: 180
 img_width = 128 #Default: 180
 epochs = 20 #Default:5
@@ -163,5 +163,5 @@ cv.destroyAllWindows()
 print("Saving")
 #with open('fruitTest.npy', 'wb') as file_pi:
 #    pickle.dump(history.history, file_pi)
-#model.save("fruitModel.h5")
+model.save("fruitModel.h5")
 print("Saved")
