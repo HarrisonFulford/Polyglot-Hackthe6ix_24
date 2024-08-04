@@ -12,14 +12,37 @@ from keras import Sequential
 from keras import Model
 
 batch_size = 64 #Default: 64
-img_height = 180 #Default: 180
-img_width = 180 #Default: 180
+img_height = 128 #Default: 180
+img_width = 128 #Default: 180
 epochs = 7 #Default:5
 print("Loading")
-with open('fruitTest.npy', "rb") as file_pi:
-    history = pickle.load(file_pi)
+new_model = tf.keras.models.load_model('fruitModel.keras')
 
-acc = history['accuracy']
+# Show the model architecture
+new_model.summary()
+
+frameno = 0
+ssnum = 0
+framesPerPhoto = 3 #How often a photo will be taken (Per frame)
+photoType = '.jpg' #Photo type (png, jpg, etc)
+class_names = ["apple", "banana", "mango", "orange"]
+def checkImg():
+  cam_path = "screenshots/currentFrame" + photoType
+  img = tf.keras.utils.load_img(
+      cam_path, target_size=(img_height, img_width)
+  )
+  img_array = tf.keras.utils.img_to_array(img)
+  img_array = tf.expand_dims(img_array, 0) # Create a batch
+
+  predictions = new_model.predict(img_array)
+  score = tf.nn.softmax(predictions[0])
+
+  print(
+      "This image most likely belongs to {} with a {:.2f} percent confidence."
+      .format(class_names[np.argmax(score)], 100 * np.max(score))
+  )
+checkImg()
+"""acc = history['accuracy']
 val_acc = history['val_accuracy']
 #acc = history.history['accuracy']
 #val_acc = history.history['val_accuracy']
@@ -43,4 +66,4 @@ plt.plot(epochs_range, loss, label='Training Loss')
 plt.plot(epochs_range, val_loss, label='Validation Loss')
 plt.legend(loc='upper right')
 plt.title('Training and Validation Loss')
-plt.show()
+plt.show()"""

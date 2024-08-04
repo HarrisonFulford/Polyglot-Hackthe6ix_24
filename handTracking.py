@@ -28,7 +28,7 @@ def transferAxisCordInfo():
 
 def cropImg():
     # Import packages    
-    img = cv2.imread("screenshots/currentFrame" + int(ssnum) + photoType)
+    img = cv2.imread("screenshots/currentFrame" + str(ssnum) + photoType)
     cv2.imshow("original", img)
     # Cropping an image
     cropped_image = img[topAxis:leftAxis, bottomAxis:rightAxis] 

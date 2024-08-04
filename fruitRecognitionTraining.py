@@ -121,29 +121,7 @@ plt.legend(loc='upper right')
 plt.title('Training and Validation Loss')
 plt.show()
 
-vid = cv.VideoCapture(0) 
-frameno = 0
-framesPerPhoto = 5 #How often a photo will be taken (Per frame)
-photoType = ".jpg"
-
-def checkImg():
-  cam_path = "screenshots/currentFrame" + photoType
-  img = tf.keras.utils.load_img(
-      cam_path, target_size=(img_height, img_width)
-  )
-  img_array = tf.keras.utils.img_to_array(img)
-  img_array = tf.expand_dims(img_array, 0) # Create a batch
-
-  predictions = model.predict(img_array)
-  score = tf.nn.softmax(predictions[0])
-
-  print(
-      "This image most likely belongs to {} with a {:.2f} percent confidence."
-      .format(class_names[np.argmax(score)], 100 * np.max(score))
-  )
-  return "a"
-
-#DOne in handTracking.py
+#Done in handTracking.py
 """
 while(True):
   # Display the resulting frame 
@@ -168,7 +146,8 @@ vid.release()
 cv.destroyAllWindows() 
 """
 print("Saving")
+
 #with open('fruitTest.npy', 'wb') as file_pi:
 #    pickle.dump(history.history, file_pi)
-#model.save("fruitModel.h5")
+model.save("fruitModel.keras")
 print("Saved")
