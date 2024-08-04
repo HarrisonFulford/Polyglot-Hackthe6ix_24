@@ -124,10 +124,10 @@ plt.show()
 vid = cv.VideoCapture(0) 
 frameno = 0
 framesPerPhoto = 5 #How often a photo will be taken (Per frame)
-photoType = ".png"
+photoType = ".jpg"
 
 def checkImg():
-  cam_path = "screenshots/currentFrame.png"
+  cam_path = "screenshots/currentFrame" + photoType
   img = tf.keras.utils.load_img(
       cam_path, target_size=(img_height, img_width)
   )
