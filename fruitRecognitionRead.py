@@ -25,9 +25,9 @@ frameno = 0
 ssnum = 0
 framesPerPhoto = 3 #How often a photo will be taken (Per frame)
 photoType = '.jpg' #Photo type (png, jpg, etc)
-class_names = ["apple", "banana", "mango", "orange", "vacant"]
-def checkImg(ssnum):
-  cam_path = "screenshots/currentFrame" + str(ssnum) + photoType
+class_names = ["apple", "banana", "mango", "orange"]
+def checkImg():
+  cam_path = "screenshots/currentFrame" + photoType
   img = tf.keras.utils.load_img(
       cam_path, target_size=(img_height, img_width)
   )
@@ -41,7 +41,7 @@ def checkImg(ssnum):
       "This image most likely belongs to {} with a {:.2f} percent confidence."
       .format(class_names[np.argmax(score)], 100 * np.max(score))
   )
-
+checkImg()
 """acc = history['accuracy']
 val_acc = history['val_accuracy']
 #acc = history.history['accuracy']

@@ -11,6 +11,8 @@ from keras import layers
 from keras import Sequential
 #import handTracking
 #from handTracking import transferAxisCordInfo
+#import handTracking
+#from handTracking import transferAxisCordInfo
 
 print("TensorFlow version:", tf.__version__)
 
@@ -134,6 +136,8 @@ plt.show()
 
 #Done in handTracking.py
 """
+#Done in handTracking.py
+"""
 while(True):
   # Display the resulting frame 
   if (frameno%framesPerPhoto == 0): 
@@ -157,10 +161,13 @@ vid.release()
 # Destroy all the windows 
 cv.destroyAllWindows() 
 """
+"""
 print("Saving")
+
 
 #with open('fruitTest.npy', 'wb') as file_pi:
 #    pickle.dump(history.history, file_pi)
+model.save("fruitModel.keras")
 model.save("fruitModel.keras")
 print("Saved")
 

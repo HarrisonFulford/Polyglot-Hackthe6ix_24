@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import mediapipe as mp
-from fruitRecognitionRead import checkImg
+from fruitRecognitionTraining import checkImg
 
 screenWidth = int(1512)
 screenHeight = int(2016)
@@ -14,7 +14,7 @@ vid = cv2.VideoCapture(0)
 vid.set(3, 1280)
 frameno = 0
 ssnum = 0
-framesPerPhoto = 30 #How often a photo will be taken (Per frame)
+framesPerPhoto = 3 #How often a photo will be taken (Per frame)
 photoType = '.jpg' #Photo type (png, jpg, etc)
 bottomAxis = 0
 topAxis = 0
@@ -59,7 +59,7 @@ while(True):
             cv2.rectangle(frame, (rightAxis, bottomAxis), (leftAxis, topAxis), (0, 255, 0), 2)
             drawingMp.draw_landmarks(frame, handLandmarks, handMp.HAND_CONNECTIONS)
             cropImg()
-            checkImg(ssnum)
+            checkImg()
             ssnum += 1
     # Display the resulting frame 
     cv2.imshow('video', frame) 
