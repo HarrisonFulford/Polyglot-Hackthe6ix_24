@@ -59,4 +59,10 @@ model.summary()
 
 model.fit(train, epochs=10)
 
+# Saving trained data
+model.save(finger-training.h5)
+
+# Loading trained data
+model.load( )
+
 
