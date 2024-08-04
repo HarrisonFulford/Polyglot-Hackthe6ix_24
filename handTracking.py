@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 import mediapipe as mp
 from fruitRecognitionTraining import checkImg
 
@@ -25,6 +26,18 @@ width = 256
 def transferAxisCordInfo():
     return bottomAxis, topAxis, leftAxis, rightAxis
 
+def cropImg():
+    # Import packages    
+    img = cv2.imread("screenshots/currentFrame" + int(ssnum) + photoType)
+    cv2.imshow("original", img)
+    # Cropping an image
+    cropped_image = img[topAxis:leftAxis, bottomAxis:rightAxis] 
+    # Save the cropped image
+    if cropped_image is not None and cropped_image.size > 0:
+        cv2.imwrite("screenshots/currentFrame" + str(ssnum) + photoType, cropped_image)
+    else:
+        print("Error: cropped_image is empty")
+
 while(True): 
     # Capture the video frame by frame 
     _, frame = vid.read() 
@@ -32,7 +45,7 @@ while(True):
     result = hand.process(RGBframe)
     if result.multi_hand_landmarks:
         for handLandmarks in result.multi_hand_landmarks:
-            name = "screenshots/currentFrame" + photoType
+            name = "screenshots/currentFrame" + str(ssnum) + photoType
             print ('New frame captured')
             cv2.imwrite(name, frame)
             #print(handLandmarks)
@@ -45,7 +58,9 @@ while(True):
             rightAxis = int((indexTip.x*screenWidth+(width/2))*0.83)
             cv2.rectangle(frame, (rightAxis, bottomAxis), (leftAxis, topAxis), (0, 255, 0), 2)
             drawingMp.draw_landmarks(frame, handLandmarks, handMp.HAND_CONNECTIONS)
+            cropImg()
             checkImg()
+            ssnum += 1
     # Display the resulting frame 
     cv2.imshow('video', frame) 
     if cv2.waitKey(1) & 0xFF == ord('q'): 
