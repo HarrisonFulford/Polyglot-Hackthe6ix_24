@@ -9,15 +9,20 @@ import pathlib
 import tensorflow
 from keras import layers
 from keras import Sequential
+#import handTracking
+#from handTracking import transferAxisCordInfo
 
 print("TensorFlow version:", tf.__version__)
 
-batch_size = 32 #Default: 64
+#bottomAxis, topAxis, leftAxis, rightAxis = transferAxisCordInfo()
+#print(topAxis, leftAxis, bottomAxis, rightAxis)
+
+batch_size = 64 #Default: 64
 img_height = 128 #Default: 180
 img_width = 128 #Default: 180
-epochs = 20 #Default:5
+epochs = 2 #Default:5
 train_ds = tf.keras.utils.image_dataset_from_directory(
-  'fruits',
+  'testData',
   validation_split=0.2, #Default: 0.2 
   subset="training",
   seed=123,
@@ -25,7 +30,7 @@ train_ds = tf.keras.utils.image_dataset_from_directory(
   image_size=(img_height, img_width),
   batch_size=batch_size)
 val_ds = tf.keras.utils.image_dataset_from_directory(
-  'fruits',
+  'testData',
   validation_split=0.8, #Default: 0.2
   subset="validation",
   seed=123,
@@ -138,6 +143,8 @@ def checkImg():
   )
   return "a"
 
+#DOne in handTracking.py
+"""
 while(True):
   # Display the resulting frame 
   if (frameno%framesPerPhoto == 0): 
@@ -159,7 +166,7 @@ while(True):
 vid.release() 
 # Destroy all the windows 
 cv.destroyAllWindows() 
-
+"""
 print("Saving")
 #with open('fruitTest.npy', 'wb') as file_pi:
 #    pickle.dump(history.history, file_pi)

@@ -11,8 +11,7 @@ framesPerPhoto = 60 #How often a photo will be taken (Per frame)
 photoType = '.png' #Photo type (png, jpg, etc)
 while(True): 
       
-    # Capture the video frame 
-    # by frame 
+    # Capture the video frame by frame 
     ret, frame = vid.read() 
   
     # Display the resulting frame 
@@ -25,9 +24,7 @@ while(True):
         frameno = 0
     frameno += 1
 
-    # the 'q' button is set as the 
-    # quitting button you may use any 
-    # desired button of your choice 
+    # the 'q' button is set as the exit button 
     if cv2.waitKey(1) & 0xFF == ord('q'): 
         break
   
