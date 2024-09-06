@@ -1,1 +1,2 @@
-# Hackthe6ix_24
+# Hackthe6ix_24_Polyglot
+The goal of polyglot is to effectively remove user input in the language learning process, to integrate said process into ones daily life as much as possible. With the front end being built in UNITY (I know, our front end guy is crazy), the project is diplayed as a mobile app. Our main feature utilizes smart glasses capable of transmitting a live feed to a local device, such that the user can point at any object they want to hear in a language of their choice, and then hear it. Feel free to check the projectmap.png for a visual display of our tech stack and flow.
